@@ -1,4 +1,4 @@
-﻿namespace SchedulingApp.Models
+﻿namespace SchedulingApp
 {
 	partial class Login
 	{
