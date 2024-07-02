@@ -17,6 +17,5 @@ namespace SchedulingApp.Models
 		public DateTime LastUpdate { get; set; }
 		public string LastUpdateBy { get; set; }
 
-		public virtual Address Address { get; set; }
 	}
 }

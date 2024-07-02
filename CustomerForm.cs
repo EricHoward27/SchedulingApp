@@ -217,10 +217,16 @@ namespace SchedulingApp
 				int customerId = Convert.ToInt32(dataGridViewCustomers.CurrentRow.Cells["CustomerId"].Value);
 				using (var context = new ScheduleDbContext())
 				{
-					var customer = context.Customers.Include("Address").FirstOrDefault(c => c.CustomerId == customerId);
+					var customer = context.Customers
+										  .Join(context.Addresses,
+												c => c.AddressId,
+												a => a.AddressId,
+												(c, a) => new { Customer = c, Address = a })
+										  .FirstOrDefault(ca => ca.Customer.CustomerId == customerId);
+
 					if (customer != null)
 					{
-						txtCustomerName.Text = customer.CustomerName;
+						txtCustomerName.Text = customer.Customer.CustomerName;
 						txtAddressLine1.Text = customer.Address.Address1;
 						txtAddressLine2.Text = customer.Address.Address2;
 						cmbCity.SelectedValue = customer.Address.CityId;
@@ -256,7 +262,7 @@ namespace SchedulingApp
 				{
 					var cities = context.Cities.ToList();
 					cmbCity.DataSource = cities;
-					cmbCity.DisplayMember = "City";
+					cmbCity.DisplayMember = "CityName";
 					cmbCity.ValueMember = "CityId";
 				}
 			}
@@ -343,7 +349,7 @@ namespace SchedulingApp
 						var customer = new Customer
 						{
 							CustomerName = txtCustomerName.Text.Trim(),
-							AddressId = 1,
+							AddressId = address.AddressId,
 							Active = true,
 							CreateDate = DateTime.Now,
 							CreatedBy = "Admin",
