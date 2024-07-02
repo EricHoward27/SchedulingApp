@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,16 @@ namespace SchedulingApp
 		private TextBox txtCustomerName;
 		private Label lblCustomerAddress;
 		private TextBox txtCustomerAddress;
+		private Label lblAddressLine1;
+		private TextBox txtAddressLine1;
+		private Label lblAddressLine2;
+		private TextBox txtAddressLine2;
+		private Label lblCity;
+		private ComboBox cmbCity;
+		private Label lblPostalCode;
+		private TextBox txtPostalCode;
+		private Label lblPhone;
+		private TextBox txtPhone;
 		private Label lblCustomerPhone;
 		private TextBox txtCustomerPhone;
 		private Button btnAddCustomer;
@@ -34,10 +45,16 @@ namespace SchedulingApp
 		{
 			this.lblCustomerName = new Label();
 			this.txtCustomerName = new TextBox();
-			this.lblCustomerAddress = new Label();
-			this.txtCustomerAddress = new TextBox();
-			this.lblCustomerPhone = new Label();
-			this.txtCustomerPhone = new TextBox();
+			this.lblAddressLine1 = new Label();
+			this.txtAddressLine1 = new TextBox();
+			this.lblAddressLine2 = new Label();
+			this.txtAddressLine2 = new TextBox();
+			this.lblCity = new Label();
+			this.cmbCity = new ComboBox();
+			this.lblPostalCode = new Label();
+			this.txtPostalCode = new TextBox();
+			this.lblPhone = new Label();
+			this.txtPhone = new TextBox();
 			this.btnAddCustomer = new Button();
 			this.btnUpdateCustomer = new Button();
 			this.btnDeleteCustomer = new Button();
@@ -56,41 +73,74 @@ namespace SchedulingApp
 			this.lblCustomerName.Text = "Customer Name";
 
 			// txtCustomerName
-			this.txtCustomerName.Location = new System.Drawing.Point(100, 12);
+			this.txtCustomerName.Location = new System.Drawing.Point(80, 12);
 			this.txtCustomerName.Name = "txtCustomerName";
 			this.txtCustomerName.Size = new System.Drawing.Size(192, 20);
 			this.txtCustomerName.TabIndex = 1;
 
-			// lblCustomerAddress
-			this.lblCustomerAddress.AutoSize = true;
-			this.lblCustomerAddress.Location = new System.Drawing.Point(12, 41);
-			this.lblCustomerAddress.Name = "lblCustomerAddress";
-			this.lblCustomerAddress.Size = new System.Drawing.Size(45, 13);
-			this.lblCustomerAddress.TabIndex = 2;
-			this.lblCustomerAddress.Text = "Address";
+			// lblCustomerAddress and txtCustomerAddress
+			this.lblAddressLine1.AutoSize = true;
+			this.lblAddressLine1.Location = new System.Drawing.Point(12, 42);
+			this.lblAddressLine1.Name = "lblAddressLine1";
+			this.lblAddressLine1.Size = new System.Drawing.Size(45, 13);
+			this.lblAddressLine1.TabIndex = 2;
+			this.lblAddressLine1.Text = "Address Line 1";
 
-			// txtCustomerAddress
-			this.txtCustomerAddress.Location = new System.Drawing.Point(100, 38);
-			this.txtCustomerAddress.Name = "txtCustomerAddress";
-			this.txtCustomerAddress.Size = new System.Drawing.Size(192, 20);
-			this.txtCustomerAddress.TabIndex = 3;
+			this.txtAddressLine1.Location = new System.Drawing.Point(80, 39);
+			this.txtAddressLine1.Name = "txtAddressLine1";
+			this.txtAddressLine1.Size = new System.Drawing.Size(192, 20);
+			this.txtAddressLine1.TabIndex = 3;
 
-			// lblCustomerPhone
-			this.lblCustomerPhone.AutoSize = true;
-			this.lblCustomerPhone.Location = new System.Drawing.Point(12, 67);
-			this.lblCustomerPhone.Name = "lblCustomerPhone";
-			this.lblCustomerPhone.Size = new System.Drawing.Size(78, 13);
-			this.lblCustomerPhone.TabIndex = 4;
-			this.lblCustomerPhone.Text = "Phone Number";
+			this.lblAddressLine2.AutoSize = true;
+			this.lblAddressLine2.Location = new System.Drawing.Point(12, 68);
+			this.lblAddressLine2.Name = "lblAddressLine2";
+			this.lblAddressLine2.Size = new System.Drawing.Size(45, 13);
+			this.lblAddressLine2.TabIndex = 4;
+			this.lblAddressLine2.Text = "Address Line 2";
 
-			// txtCustomerPhone
-			this.txtCustomerPhone.Location = new System.Drawing.Point(100, 64);
-			this.txtCustomerPhone.Name = "txtCustomerPhone";
-			this.txtCustomerPhone.Size = new System.Drawing.Size(192, 20);
-			this.txtCustomerPhone.TabIndex = 5;
+			this.txtAddressLine2.Location = new System.Drawing.Point(80, 65);
+			this.txtAddressLine2.Name = "txtAddressLine2";
+			this.txtAddressLine2.Size = new System.Drawing.Size(192, 20);
+			this.txtAddressLine2.TabIndex = 5;
+
+			this.lblCity.AutoSize = true;
+			this.lblCity.Location = new System.Drawing.Point(12, 94);
+			this.lblCity.Name = "lblCity";
+			this.lblCity.Size = new System.Drawing.Size(26, 13);
+			this.lblCity.TabIndex = 6;
+			this.lblCity.Text = "City";
+
+			this.cmbCity.Location = new System.Drawing.Point(80, 91);
+			this.cmbCity.Name = "cmbCity";
+			this.cmbCity.Size = new System.Drawing.Size(192, 20);
+			this.cmbCity.TabIndex = 7;
+
+			this.lblPostalCode.AutoSize = true;
+			this.lblPostalCode.Location = new System.Drawing.Point(12, 120);
+			this.lblPostalCode.Name = "lblPostalCode";
+			this.lblPostalCode.Size = new System.Drawing.Size(67, 13);
+			this.lblPostalCode.TabIndex = 8;
+			this.lblPostalCode.Text = "Postal Code";
+
+			this.txtPostalCode.Location = new System.Drawing.Point(80, 117);
+			this.txtPostalCode.Name = "txtPostalCode";
+			this.txtPostalCode.Size = new System.Drawing.Size(192, 20);
+			this.txtPostalCode.TabIndex = 9;
+
+			this.lblPhone.AutoSize = true;
+			this.lblPhone.Location = new System.Drawing.Point(12, 146);
+			this.lblPhone.Name = "lblPhone";
+			this.lblPhone.Size = new System.Drawing.Size(38, 13);
+			this.lblPhone.TabIndex = 10;
+			this.lblPhone.Text = "Phone";
+
+			this.txtPhone.Location = new System.Drawing.Point(80, 143);
+			this.txtPhone.Name = "txtPhone";
+			this.txtPhone.Size = new System.Drawing.Size(192, 20);
+			this.txtPhone.TabIndex = 11;
 
 			//btnAddCustomer
-			this.btnAddCustomer.Location = new System.Drawing.Point(15, 90);
+			this.btnAddCustomer.Location = new System.Drawing.Point(15, 170);
 			this.btnAddCustomer.Name = "btnAddCustomer";
 			this.btnAddCustomer.Size = new System.Drawing.Size(75, 23);
 			this.btnAddCustomer.TabIndex = 6;
@@ -99,7 +149,7 @@ namespace SchedulingApp
 			this.btnAddCustomer.Click += new EventHandler(this.btnAddCustomer_Click);
 
 			//btnUpdateCustomer
-			this.btnUpdateCustomer.Location = new System.Drawing.Point(100, 90);
+			this.btnUpdateCustomer.Location = new System.Drawing.Point(100, 170);
 			this.btnUpdateCustomer.Name = "btnUpdateCustomer";
 			this.btnUpdateCustomer.Size = new System.Drawing.Size(75, 23);
 			this.btnUpdateCustomer.TabIndex = 7;
@@ -108,7 +158,7 @@ namespace SchedulingApp
 			this.btnUpdateCustomer.Click += new EventHandler(this.btnUpdateCustomer_Click);
 
 			//btnDeleteCustomer
-			this.btnDeleteCustomer.Location = new System.Drawing.Point(190, 90);
+			this.btnDeleteCustomer.Location = new System.Drawing.Point(190, 170);
 			this.btnDeleteCustomer.Name = "btnDeleteCustomer";
 			this.btnDeleteCustomer.Size = new System.Drawing.Size(75, 23);
 			this.btnDeleteCustomer.TabIndex = 8;
@@ -118,7 +168,7 @@ namespace SchedulingApp
 
 			//dataGridViewCustomers
 			this.dataGridViewCustomers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridViewCustomers.Location = new System.Drawing.Point(15, 120);
+			this.dataGridViewCustomers.Location = new System.Drawing.Point(15, 200);
 			this.dataGridViewCustomers.Name = "dataGridViewCustomers";
 			this.dataGridViewCustomers.Size = new System.Drawing.Size(400, 200);
 			this.dataGridViewCustomers.TabIndex = 9;
@@ -139,10 +189,16 @@ namespace SchedulingApp
 			this.Controls.Add(this.btnDeleteCustomer);
 			this.Controls.Add(this.btnUpdateCustomer);
 			this.Controls.Add(this.btnAddCustomer);
-			this.Controls.Add(this.txtCustomerPhone);
-			this.Controls.Add(this.lblCustomerPhone);
-			this.Controls.Add(this.txtCustomerAddress);
-			this.Controls.Add(this.lblCustomerAddress);
+			this.Controls.Add(this.lblAddressLine1);
+			this.Controls.Add(this.txtAddressLine1);
+			this.Controls.Add(this.lblAddressLine2);
+			this.Controls.Add(this.txtAddressLine2);
+			this.Controls.Add(this.lblCity);
+			this.Controls.Add(this.cmbCity);
+			this.Controls.Add(this.lblPostalCode);
+			this.Controls.Add(this.txtPostalCode);
+			this.Controls.Add(this.lblPhone);
+			this.Controls.Add(this.txtPhone);
 			this.Controls.Add(this.txtCustomerName);
 			this.Controls.Add(this.lblCustomerName);
 			this.Name = "CustomerForm";
@@ -158,9 +214,20 @@ namespace SchedulingApp
 		{
 			if(dataGridViewCustomers.CurrentRow != null)
 			{
-				txtCustomerName.Text = dataGridViewCustomers.CurrentRow.Cells["CustomerName"].Value.ToString();
-				txtCustomerAddress.Text = dataGridViewCustomers.CurrentRow.Cells["Address"].Value.ToString();
-				txtCustomerPhone.Text = dataGridViewCustomers.CurrentRow.Cells["Phone"].Value.ToString();
+				int customerId = Convert.ToInt32(dataGridViewCustomers.CurrentRow.Cells["CustomerId"].Value);
+				using (var context = new ScheduleDbContext())
+				{
+					var customer = context.Customers.Include("Address").FirstOrDefault(c => c.CustomerId == customerId);
+					if (customer != null)
+					{
+						txtCustomerName.Text = customer.CustomerName;
+						txtAddressLine1.Text = customer.Address.Address1;
+						txtAddressLine2.Text = customer.Address.Address2;
+						cmbCity.SelectedValue = customer.Address.CityId;
+						txtPostalCode.Text = customer.Address.PostalCode;
+						txtPhone.Text = customer.Address.Phone;
+					}
+				}
 			}
 		}
 
@@ -180,6 +247,25 @@ namespace SchedulingApp
 			}
 		}
 
+		// load cities into the combo box
+		private void LoadCities()
+		{
+			try
+			{
+				using(var context = new ScheduleDbContext())
+				{
+					var cities = context.Cities.ToList();
+					cmbCity.DataSource = cities;
+					cmbCity.DisplayMember = "City";
+					cmbCity.ValueMember = "CityId";
+				}
+			}
+			catch(Exception ex)
+			{
+				MessageBox.Show($"An error occurred while loading cities: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
 
 
 		// validation for customer form
@@ -189,30 +275,43 @@ namespace SchedulingApp
 
 			if (string.IsNullOrWhiteSpace(txtCustomerName.Text))
 			{
-				errorMessage = "Customer name cannot be empty";
+				errorMessage = "Customer name cannot be empty.";
 				return false;
 			}
 
-			if (string.IsNullOrWhiteSpace(txtCustomerAddress.Text))
+			if (string.IsNullOrWhiteSpace(txtAddressLine1.Text))
 			{
-				errorMessage = "Customer address cannot be empty";
+				errorMessage = "Address Line 1 cannot be empty.";
 				return false;
 			}
 
-			if (string.IsNullOrWhiteSpace(txtCustomerPhone.Text))
+			if (cmbCity.SelectedValue == null)
 			{
-				errorMessage = "Customer phone cannot be empty";
+				errorMessage = "City must be selected.";
 				return false;
 			}
-			
-			foreach(char c in txtCustomerPhone.Text)
+
+			if (string.IsNullOrWhiteSpace(txtPostalCode.Text))
 			{
-				if(!char.IsDigit(c) && c!= '-')
+				errorMessage = "Postal code cannot be empty.";
+				return false;
+			}
+
+			if (string.IsNullOrWhiteSpace(txtPhone.Text))
+			{
+				errorMessage = "Phone number cannot be empty.";
+				return false;
+			}
+
+			foreach (char c in txtPhone.Text)
+			{
+				if (!char.IsDigit(c) && c != '-')
 				{
-					errorMessage = "Phone number can only contain digits and dashes";
+					errorMessage = "Phone number can only contain digits and dashes.";
 					return false;
 				}
 			}
+
 			return true;
 		}
 
@@ -225,6 +324,22 @@ namespace SchedulingApp
 				{
 					using (var context = new ScheduleDbContext())
 					{
+						var address = new Address
+						{
+							Address1 = txtAddressLine1.Text.Trim(),
+							Address2 = txtAddressLine2.Text.Trim(),
+							CityId = (int)cmbCity.SelectedValue,
+							PostalCode = txtPostalCode.Text.Trim(),
+							Phone = txtPhone.Text.Trim(),
+							CreateDate = DateTime.Now,
+							CreatedBy = "Admin",
+							LastUpdate = DateTime.Now,
+							LastUpdateBy = "Admin"
+						};
+						context.Addresses.Add(address);
+						context.SaveChanges();
+
+
 						var customer = new Customer
 						{
 							CustomerName = txtCustomerName.Text.Trim(),
@@ -312,6 +427,7 @@ namespace SchedulingApp
 		private void CustomerForm_Load(object sender, EventArgs e)
 		{
 			LoadCustomers();
+			LoadCities();
 		}
 	}
 }

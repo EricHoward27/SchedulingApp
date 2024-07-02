@@ -56,6 +56,12 @@ namespace SchedulingApp
 			if (ValidateUser(username, password))
 			{
 				MessageBox.Show("Login successful");
+
+				//open customer form
+				var customerForm = new CustomerForm();
+				customerForm.Show();
+
+				this.Hide();
 			} else
 			{
 				lblError.Text = Resources.LoginError;
