@@ -61,6 +61,10 @@ namespace SchedulingApp
 				var customerForm = new CustomerForm();
 				customerForm.Show();
 
+				//open appointment form
+				var appointmentForm = new AppointmentForm();
+				appointmentForm.Show();
+
 				this.Hide();
 			} else
 			{
