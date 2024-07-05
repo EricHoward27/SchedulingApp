@@ -22,8 +22,8 @@ namespace SchedulingApp
 		private TextBox txtAddressLine1;
 		private Label lblAddressLine2;
 		private TextBox txtAddressLine2;
-		private Label lblCity;
-		private ComboBox cmbCity;
+		private Label lblCityName;
+		private TextBox txtCityName;
 		private Label lblPostalCode;
 		private TextBox txtPostalCode;
 		private Label lblPhone;
@@ -49,8 +49,8 @@ namespace SchedulingApp
 			this.txtAddressLine1 = new TextBox();
 			this.lblAddressLine2 = new Label();
 			this.txtAddressLine2 = new TextBox();
-			this.lblCity = new Label();
-			this.cmbCity = new ComboBox();
+			this.lblCityName = new Label();
+			this.txtCityName = new TextBox();
 			this.lblPostalCode = new Label();
 			this.txtPostalCode = new TextBox();
 			this.lblPhone = new Label();
@@ -64,16 +64,18 @@ namespace SchedulingApp
 			((System.ComponentModel.ISupportInitialize)(this.dataGridViewCustomers)).BeginInit();
 			this.SuspendLayout();
 
+			Size = new System.Drawing.Size(1200, 900);
+
 			// lblCustomerName
 			this.lblCustomerName.AutoSize = true;
 			this.lblCustomerName.Location = new System.Drawing.Point(12, 15);
 			this.lblCustomerName.Name = "lblCustomerName";
-			this.lblCustomerName.Size = new System.Drawing.Size(82, 13);
+			this.lblCustomerName.Size = new System.Drawing.Size(45, 13);
 			this.lblCustomerName.TabIndex = 0;
 			this.lblCustomerName.Text = "Customer Name";
 
 			// txtCustomerName
-			this.txtCustomerName.Location = new System.Drawing.Point(80, 12);
+			this.txtCustomerName.Location = new System.Drawing.Point(95, 15);
 			this.txtCustomerName.Name = "txtCustomerName";
 			this.txtCustomerName.Size = new System.Drawing.Size(192, 20);
 			this.txtCustomerName.TabIndex = 1;
@@ -86,7 +88,7 @@ namespace SchedulingApp
 			this.lblAddressLine1.TabIndex = 2;
 			this.lblAddressLine1.Text = "Address Line 1";
 
-			this.txtAddressLine1.Location = new System.Drawing.Point(80, 39);
+			this.txtAddressLine1.Location = new System.Drawing.Point(95, 42);
 			this.txtAddressLine1.Name = "txtAddressLine1";
 			this.txtAddressLine1.Size = new System.Drawing.Size(192, 20);
 			this.txtAddressLine1.TabIndex = 3;
@@ -98,22 +100,22 @@ namespace SchedulingApp
 			this.lblAddressLine2.TabIndex = 4;
 			this.lblAddressLine2.Text = "Address Line 2";
 
-			this.txtAddressLine2.Location = new System.Drawing.Point(80, 65);
+			this.txtAddressLine2.Location = new System.Drawing.Point(95, 68);
 			this.txtAddressLine2.Name = "txtAddressLine2";
 			this.txtAddressLine2.Size = new System.Drawing.Size(192, 20);
 			this.txtAddressLine2.TabIndex = 5;
 
-			this.lblCity.AutoSize = true;
-			this.lblCity.Location = new System.Drawing.Point(12, 94);
-			this.lblCity.Name = "lblCity";
-			this.lblCity.Size = new System.Drawing.Size(26, 13);
-			this.lblCity.TabIndex = 6;
-			this.lblCity.Text = "City";
+			this.lblCityName.AutoSize = true;
+			this.lblCityName.Location = new System.Drawing.Point(12, 94);
+			this.lblCityName.Name = "lblCity";
+			this.lblCityName.Size = new System.Drawing.Size(26, 13);
+			this.lblCityName.TabIndex = 6;
+			this.lblCityName.Text = "City";
 
-			this.cmbCity.Location = new System.Drawing.Point(80, 91);
-			this.cmbCity.Name = "cmbCity";
-			this.cmbCity.Size = new System.Drawing.Size(192, 20);
-			this.cmbCity.TabIndex = 7;
+			this.txtCityName.Location = new System.Drawing.Point(95, 91);
+			this.txtCityName.Name = "txtCity";
+			this.txtCityName.Size = new System.Drawing.Size(192, 20);
+			this.txtCityName.TabIndex = 7;
 
 			this.lblPostalCode.AutoSize = true;
 			this.lblPostalCode.Location = new System.Drawing.Point(12, 120);
@@ -122,7 +124,7 @@ namespace SchedulingApp
 			this.lblPostalCode.TabIndex = 8;
 			this.lblPostalCode.Text = "Postal Code";
 
-			this.txtPostalCode.Location = new System.Drawing.Point(80, 117);
+			this.txtPostalCode.Location = new System.Drawing.Point(95, 117);
 			this.txtPostalCode.Name = "txtPostalCode";
 			this.txtPostalCode.Size = new System.Drawing.Size(192, 20);
 			this.txtPostalCode.TabIndex = 9;
@@ -134,7 +136,7 @@ namespace SchedulingApp
 			this.lblPhone.TabIndex = 10;
 			this.lblPhone.Text = "Phone";
 
-			this.txtPhone.Location = new System.Drawing.Point(80, 143);
+			this.txtPhone.Location = new System.Drawing.Point(95, 143);
 			this.txtPhone.Name = "txtPhone";
 			this.txtPhone.Size = new System.Drawing.Size(192, 20);
 			this.txtPhone.TabIndex = 11;
@@ -193,8 +195,8 @@ namespace SchedulingApp
 			this.Controls.Add(this.txtAddressLine1);
 			this.Controls.Add(this.lblAddressLine2);
 			this.Controls.Add(this.txtAddressLine2);
-			this.Controls.Add(this.lblCity);
-			this.Controls.Add(this.cmbCity);
+			this.Controls.Add(this.lblCityName);
+			this.Controls.Add(this.txtCityName);
 			this.Controls.Add(this.lblPostalCode);
 			this.Controls.Add(this.txtPostalCode);
 			this.Controls.Add(this.lblPhone);
@@ -217,21 +219,21 @@ namespace SchedulingApp
 				int customerId = Convert.ToInt32(dataGridViewCustomers.CurrentRow.Cells["CustomerId"].Value);
 				using (var context = new ScheduleDbContext())
 				{
-					var customer = context.Customers
-										  .Join(context.Addresses,
-												c => c.AddressId,
-												a => a.AddressId,
-												(c, a) => new { Customer = c, Address = a })
-										  .FirstOrDefault(ca => ca.Customer.CustomerId == customerId);
-
+					var customer = context.Customers.FirstOrDefault(c => c.CustomerId == customerId);
 					if (customer != null)
 					{
-						txtCustomerName.Text = customer.Customer.CustomerName;
-						txtAddressLine1.Text = customer.Address.Address1;
-						txtAddressLine2.Text = customer.Address.Address2;
-						cmbCity.SelectedValue = customer.Address.CityId;
-						txtPostalCode.Text = customer.Address.PostalCode;
-						txtPhone.Text = customer.Address.Phone;
+						var address = context.Addresses.FirstOrDefault(a => a.AddressId == customer.AddressId);
+						if (address != null)
+						{
+							var city = context.Cities.FirstOrDefault(c => c.CityId == address.CityId);
+
+							txtCustomerName.Text = customer.CustomerName;
+							txtAddressLine1.Text = address.Address1;
+							txtAddressLine2.Text = address.Address2;
+							txtCityName.Text = city?.CityName; // Fetch the city name
+							txtPostalCode.Text = address.PostalCode;
+							txtPhone.Text = address.Phone;
+						}
 					}
 				}
 			}
@@ -254,6 +256,7 @@ namespace SchedulingApp
 		}
 
 		// load cities into the combo box
+		/*
 		private void LoadCities()
 		{
 			try
@@ -272,7 +275,7 @@ namespace SchedulingApp
 			}
 		}
 
-
+		*/
 
 		// validation for customer form
 		private bool ValidateCustomerFields(out string errorMessage)
@@ -291,7 +294,7 @@ namespace SchedulingApp
 				return false;
 			}
 
-			if (cmbCity.SelectedValue == null)
+			if (txtCityName.Text == null)
 			{
 				errorMessage = "City must be selected.";
 				return false;
@@ -326,15 +329,24 @@ namespace SchedulingApp
 		{
 			try
 			{
-				if(ValidateCustomerFields(out string errorMessage))
+				if (ValidateCustomerFields(out string errorMessage))
 				{
 					using (var context = new ScheduleDbContext())
 					{
+						var cityName = txtCityName.Text.Trim();
+						var city = context.Cities.FirstOrDefault(c => c.CityName == cityName);
+						if (city == null)
+						{
+							city = new City { CityName = cityName };
+							context.Cities.Add(city);
+							context.SaveChanges();
+						}
+
 						var address = new Address
 						{
 							Address1 = txtAddressLine1.Text.Trim(),
 							Address2 = txtAddressLine2.Text.Trim(),
-							CityId = (int)cmbCity.SelectedValue,
+							CityId = city.CityId,
 							PostalCode = txtPostalCode.Text.Trim(),
 							Phone = txtPhone.Text.Trim(),
 							CreateDate = DateTime.Now,
@@ -344,7 +356,6 @@ namespace SchedulingApp
 						};
 						context.Addresses.Add(address);
 						context.SaveChanges();
-
 
 						var customer = new Customer
 						{
@@ -366,7 +377,7 @@ namespace SchedulingApp
 					MessageBox.Show(errorMessage, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				MessageBox.Show($"An error occurred while adding the customer: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -377,15 +388,37 @@ namespace SchedulingApp
 		{
 			try
 			{
-				if(ValidateCustomerFields(out string errorMessage))
+				if (ValidateCustomerFields(out string errorMessage))
 				{
 					using (var context = new ScheduleDbContext())
 					{
 						int customerId = Convert.ToInt32(dataGridViewCustomers.CurrentRow.Cells["CustomerId"].Value);
 						var customer = context.Customers.FirstOrDefault(c => c.CustomerId == customerId);
 
-						if(customer != null)
+						if (customer != null)
 						{
+							var cityName = txtCityName.Text.Trim();
+							var city = context.Cities.FirstOrDefault(c => c.CityName == cityName);
+							if (city == null)
+							{
+								city = new City { CityName = cityName };
+								context.Cities.Add(city);
+								context.SaveChanges();
+							}
+
+							var address = context.Addresses.FirstOrDefault(a => a.AddressId == customer.AddressId);
+							if (address != null)
+							{
+								address.Address1 = txtAddressLine1.Text.Trim();
+								address.Address2 = txtAddressLine2.Text.Trim();
+								address.CityId = city.CityId;
+								address.PostalCode = txtPostalCode.Text.Trim();
+								address.Phone = txtPhone.Text.Trim();
+								address.LastUpdate = DateTime.Now;
+								address.LastUpdateBy = "Admin";
+								context.SaveChanges();
+							}
+
 							customer.CustomerName = txtCustomerName.Text.Trim();
 							customer.LastUpdate = DateTime.Now;
 							customer.LastUpdateBy = "Admin";
@@ -399,7 +432,7 @@ namespace SchedulingApp
 					MessageBox.Show(errorMessage, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				MessageBox.Show($"An error occurred while updating the customer: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -415,15 +448,20 @@ namespace SchedulingApp
 					int customerId = Convert.ToInt32(dataGridViewCustomers.CurrentRow.Cells["CustomerId"].Value);
 					var customer = context.Customers.FirstOrDefault(c => c.CustomerId == customerId);
 
-					if(customer != null)
+					if (customer != null)
 					{
+						var address = context.Addresses.FirstOrDefault(a => a.AddressId == customer.AddressId);
 						context.Customers.Remove(customer);
+						if (address != null)
+						{
+							context.Addresses.Remove(address);
+						}
 						context.SaveChanges();
 						LoadCustomers();
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				MessageBox.Show($"An error occurred while deleting the customer: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -433,7 +471,7 @@ namespace SchedulingApp
 		private void CustomerForm_Load(object sender, EventArgs e)
 		{
 			LoadCustomers();
-			LoadCities();
+			//LoadCities();
 		}
 	}
 }
