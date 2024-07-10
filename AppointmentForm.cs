@@ -39,6 +39,7 @@ namespace SchedulingApp
 		private Button btnDeleteAppointment;
 		private MonthCalendar monthCalendar;
 		private DataGridView dataGridViewAppointments;
+		private RichTextBox richTextBoxLog;
 
 		public AppointmentForm()
 		{
@@ -220,6 +221,15 @@ namespace SchedulingApp
 			this.dataGridViewAppointments.Size = new System.Drawing.Size(550, 300);
 			this.dataGridViewAppointments.SelectionChanged += new System.EventHandler(this.dataGridViewAppointments_SelectionChanged);
 
+			// Initialize the RichTextBox for logging
+			this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
+			this.richTextBoxLog.Location = new System.Drawing.Point(50, 750);
+			this.richTextBoxLog.Size = new System.Drawing.Size(900, 100);
+			this.richTextBoxLog.ReadOnly = true;
+
+			// Add the RichTextBox to the form
+			this.Controls.Add(this.richTextBoxLog);
+
 			// Add controls to form
 			this.Controls.Add(this.lblTitle);
 			this.Controls.Add(this.txtTitle);
@@ -247,6 +257,23 @@ namespace SchedulingApp
 			this.Controls.Add(this.monthCalendar);
 			this.Controls.Add(this.dataGridViewAppointments);
 		}
+		// Load Appointments
+		private void LoadAppointments()
+		{
+			try
+			{
+				using (var context = new ScheduleDbContext())
+				{
+					var appointments = context.Appointments.ToList();
+					dataGridViewAppointments.DataSource = appointments;
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"An error occurred while loading appointments: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+		// Form Load Event
 		private void Form_Load(object sender, EventArgs e)
 		{
 			LoadCustomersAndAppointmentTypes();
@@ -484,22 +511,7 @@ namespace SchedulingApp
 			}
 		}
 
-		// Load Appointments
-		private void LoadAppointments()
-		{
-			try
-			{
-				using (var context = new ScheduleDbContext())
-				{
-					var appointments = context.Appointments.ToList();
-					dataGridViewAppointments.DataSource = appointments;
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show($"An error occurred while loading appointments: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-		}
+
 
 		private void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
 		{
@@ -508,18 +520,30 @@ namespace SchedulingApp
 				using (var context = new ScheduleDbContext())
 				{
 					var selectedDate = e.Start.Date;
+					var nextDate = selectedDate.AddDays(1);
+					LogMessage($"Selected Date: {selectedDate}");
+
 					var appointments = context.Appointments
-						.Where(a => DbFunctions.TruncateTime(a.Start) == selectedDate)
+						.Where(a => a.Start >= selectedDate && a.Start < nextDate)
 						.ToList();
+
+					LogMessage($"Appointments Count: {appointments.Count}");
 					dataGridViewAppointments.DataSource = appointments;
 				}
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show($"An error occurred while loading appointments for the selected date: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : string.Empty;
+				LogMessage($"Error: {ex.Message}\n{innerExceptionMessage}");
+				MessageBox.Show($"An error occurred while loading appointments for the selected date: {ex.Message}\n{innerExceptionMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
-		
+		private void LogMessage(string message)
+		{
+			richTextBoxLog.AppendText(message + Environment.NewLine);
+		}
+
+
 	}
 }
