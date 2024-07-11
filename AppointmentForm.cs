@@ -41,8 +41,9 @@ namespace SchedulingApp
 		private MonthCalendar monthCalendar;
 		private DataGridView dataGridViewAppointments;
 		private RichTextBox richTextBoxLog;
-		private Label lblTimeZone;
-		private ComboBox cmbTimeZone;
+		private Button btnAppointmentTypesByMonth;
+		private Button btnUserSchedules;
+		private Button btnCustomerAppointments;
 
 		public AppointmentForm()
 		{
@@ -230,9 +231,34 @@ namespace SchedulingApp
 			this.richTextBoxLog.Size = new System.Drawing.Size(900, 100);
 			this.richTextBoxLog.ReadOnly = true;
 
+			// appointment types by month button
+			this.btnAppointmentTypesByMonth = new System.Windows.Forms.Button();
+			this.btnAppointmentTypesByMonth.Location = new System.Drawing.Point(700, 50);
+			this.btnAppointmentTypesByMonth.Name = "btnAppointmentTypesByMonth";
+			this.btnAppointmentTypesByMonth.Size = new System.Drawing.Size(200, 30);
+			this.btnAppointmentTypesByMonth.Text = "Appointment Types by Month";
+			this.btnAppointmentTypesByMonth.Click += new System.EventHandler(this.btnAppointmentTypesByMonth_Click);
 
+			// user schedules button
+			this.btnUserSchedules = new System.Windows.Forms.Button();
+			this.btnUserSchedules.Location = new System.Drawing.Point(700, 100);
+			this.btnUserSchedules.Name = "btnUserSchedules";
+			this.btnUserSchedules.Size = new System.Drawing.Size(200, 30);
+			this.btnUserSchedules.Text = "User Schedules";
+			this.btnUserSchedules.Click += new System.EventHandler(this.btnUserSchedules_Click);
+
+			// customer appointments button
+			this.btnCustomerAppointments = new System.Windows.Forms.Button();
+			this.btnCustomerAppointments.Location = new System.Drawing.Point(700, 150);
+			this.btnCustomerAppointments.Name = "btnCustomerAppointments";
+			this.btnCustomerAppointments.Size = new System.Drawing.Size(200, 30);
+			this.btnCustomerAppointments.Text = "Customer Appointments";
+			this.btnCustomerAppointments.Click += new System.EventHandler(this.btnCustomerAppointments_Click);
 
 			// Add controls to form
+			this.Controls.Add(this.btnAppointmentTypesByMonth);
+			this.Controls.Add(this.btnUserSchedules);
+			this.Controls.Add(this.btnCustomerAppointments);
 			this.Controls.Add(this.lblTitle);
 			this.Controls.Add(this.txtTitle);
 			this.Controls.Add(this.lblDescription);
@@ -287,6 +313,38 @@ namespace SchedulingApp
 			ClearAppointmentFormData();
 			dataGridViewAppointments.ClearSelection();
 			
+		}
+		private void btnAppointmentTypesByMonth_Click(object sender, EventArgs e)
+		{
+			using (var context = new ScheduleDbContext())
+			{
+				var report = context.GetAppointmentTypesByMonth();
+				DisplayReport(report);
+			}
+		}
+
+		private void btnUserSchedules_Click(object sender, EventArgs e)
+		{
+			using (var context = new ScheduleDbContext())
+			{
+				var report = context.GetUserSchedules();
+				DisplayReport(report);
+			}
+		}
+
+		private void btnCustomerAppointments_Click(object sender, EventArgs e)
+		{
+			using (var context = new ScheduleDbContext())
+			{
+				var report = context.GetCustomerAppointments();
+				DisplayReport(report);
+			}
+		}
+
+		private void DisplayReport<T>(List<T> report)
+		{
+			var reportForm = new ReportForm<T>(report);
+			reportForm.Show();
 		}
 		private void dataGridViewAppointments_SelectionChanged(object sender, EventArgs e)
 		{

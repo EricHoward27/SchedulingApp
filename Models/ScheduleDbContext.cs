@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SchedulingApp.Models.Report;
 
 namespace SchedulingApp.Models
 {
@@ -19,6 +20,49 @@ namespace SchedulingApp.Models
 		public DbSet<Address> Addresses { get; set; }
 		public DbSet<Customer> Customers { get; set; }
 		public DbSet<Appointment> Appointments { get; set; }
+
+		//report for the num of appointments types by month
+		public List<AppointmentReport> GetAppointmentTypesByMonth()
+		{
+			var appointments = Appointments.ToList(); // Fetch all appointments to memory
+
+			var query = appointments
+				.GroupBy(a => new { a.Type, Month = a.Start.Month })
+				.Select(g => new AppointmentReport
+				{
+					AppointmentType = g.Key.Type,
+					Month = g.Key.Month,
+					Count = g.Count()
+				})
+				.ToList();
+
+			return query;
+		}
+		// report for the schedule of each user
+		public List<UserScheduleReport> GetUserSchedules()
+		{
+			return Users
+				.Select(u => new UserScheduleReport
+				{
+					UserId = u.UserId,
+					UserName = u.UserName,
+					Appointments = Appointments.Where(a => a.UserId == u.UserId).ToList()
+				})
+				.ToList();
+		}
+
+		// report for num of appointments per customer
+		public List<CustomerReport> GetCustomerAppointments()
+		{
+			return Customers
+				.Select(c => new CustomerReport
+				{
+					CustomerId = c.CustomerId,
+					CustomerName = c.CustomerName,
+					AppointmentCount = Appointments.Count(a => a.CustomerId == c.CustomerId)
+				})
+				.ToList();
+		}
 
 	}
 }
