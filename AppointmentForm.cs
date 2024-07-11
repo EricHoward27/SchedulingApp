@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -280,10 +281,12 @@ namespace SchedulingApp
 		private void Form_Load(object sender, EventArgs e)
 		{
 			LoadCustomersAndAppointmentTypes();
+			ShowUpcomingAppointmentAlert();
 			LoadAppointments();
 			OpenCustomerForm();
 			ClearAppointmentFormData();
 			dataGridViewAppointments.ClearSelection();
+			
 		}
 		private void dataGridViewAppointments_SelectionChanged(object sender, EventArgs e)
 		{
@@ -364,7 +367,6 @@ namespace SchedulingApp
 			return TimeZoneInfo.Local;
 		}
 
-
 		// Add Appointment Button Click Event
 		private void btnAddAppointment_Click(object sender, EventArgs e)
 		{
@@ -376,19 +378,17 @@ namespace SchedulingApp
 					{
 						var startDateTime = dtpAppointmentDate.Value.Date.Add(dtpStartTime.Value.TimeOfDay);
 						var endDateTime = dtpAppointmentDate.Value.Date.Add(dtpEndTime.Value.TimeOfDay);
-						var timeZone = GetLocalTimeZone();
+						var timeZone = TimeZoneInfo.Local;
 
-						if (timeZone != null)
-						{
-							startDateTime = TimeZoneInfo.ConvertTimeToUtc(startDateTime, timeZone);
-							endDateTime = TimeZoneInfo.ConvertTimeToUtc(endDateTime, timeZone);
-						}
-						else
-						{
-							return; // exit if no time zone is selected
-						}
+						// Convert to UTC for storage
+						var startUtc = TimeZoneInfo.ConvertTimeToUtc(startDateTime, timeZone);
+						var endUtc = TimeZoneInfo.ConvertTimeToUtc(endDateTime, timeZone);
 
-						if (IsWithinBusinessHours(startDateTime, endDateTime) && !HasOverlappingAppointment(startDateTime, endDateTime))
+						// Debug start and end time
+						Debug.WriteLine($"Local Start Time: {startDateTime} | UTC Start Time: {startUtc}");
+						Debug.WriteLine($"Local End Time: {endDateTime} | UTC End Time: {endUtc}");
+
+						if (IsWithinBusinessHours(startUtc, endUtc) && !HasOverlappingAppointment(startUtc, endUtc))
 						{
 							var appointment = new Appointment
 							{
@@ -399,8 +399,8 @@ namespace SchedulingApp
 								Contact = txtContact.Text.Trim(),
 								Type = cmbAppointmentType.SelectedItem.ToString(),
 								Url = txtUrl.Text.Trim(),
-								Start = startDateTime,
-								End = endDateTime,
+								Start = startUtc,
+								End = endUtc,
 								CreateDate = DateTime.UtcNow,
 								CreatedBy = "Admin",
 								LastUpdate = DateTime.UtcNow,
@@ -445,19 +445,17 @@ namespace SchedulingApp
 						{
 							var startDateTime = dtpAppointmentDate.Value.Date.Add(dtpStartTime.Value.TimeOfDay);
 							var endDateTime = dtpAppointmentDate.Value.Date.Add(dtpEndTime.Value.TimeOfDay);
-							var timeZone = GetLocalTimeZone();
+							var timeZone = TimeZoneInfo.Local;
 
-							if (timeZone != null)
-							{
-								startDateTime = TimeZoneInfo.ConvertTimeToUtc(startDateTime, timeZone);
-								endDateTime = TimeZoneInfo.ConvertTimeToUtc(endDateTime, timeZone);
-							}
-							else
-							{
-								return; // exit if no time zone is selected
-							}
+							// Convert to UTC for storage
+							var startUtc = TimeZoneInfo.ConvertTimeToUtc(startDateTime, timeZone);
+							var endUtc = TimeZoneInfo.ConvertTimeToUtc(endDateTime, timeZone);
 
-							if (IsWithinBusinessHours(startDateTime, endDateTime) && !HasOverlappingAppointment(startDateTime, endDateTime, appointmentId))
+							// Debug start and end time
+							Debug.WriteLine($"Local Start Time: {startDateTime} | UTC Start Time: {startUtc}");
+							Debug.WriteLine($"Local End Time: {endDateTime} | UTC End Time: {endUtc}");
+
+							if (IsWithinBusinessHours(startUtc, endUtc) && !HasOverlappingAppointment(startUtc, endUtc, appointmentId))
 							{
 								appointment.CustomerId = (int)cmbCustomer.SelectedValue;
 								appointment.Title = txtTitle.Text.Trim();
@@ -466,8 +464,8 @@ namespace SchedulingApp
 								appointment.Contact = txtContact.Text.Trim();
 								appointment.Type = cmbAppointmentType.SelectedItem.ToString();
 								appointment.Url = txtUrl.Text.Trim();
-								appointment.Start = startDateTime;
-								appointment.End = endDateTime;
+								appointment.Start = startUtc;
+								appointment.End = endUtc;
 								appointment.LastUpdate = DateTime.UtcNow;
 								appointment.LastUpdateBy = "Admin";
 								context.SaveChanges();
@@ -488,6 +486,71 @@ namespace SchedulingApp
 			catch (Exception ex)
 			{
 				MessageBox.Show($"An error occurred while updating the appointment: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
+		// Validate Appointment Fields
+		private bool ValidateAppointmentFields(out string errorMessage)
+		{
+			errorMessage = string.Empty;
+
+			// Validate appointment time within business hours
+			var startDateTime = dtpAppointmentDate.Value.Date.Add(dtpStartTime.Value.TimeOfDay);
+			var endDateTime = dtpAppointmentDate.Value.Date.Add(dtpEndTime.Value.TimeOfDay);
+			var timeZone = TimeZoneInfo.Local;
+
+			// Convert to UTC for validation
+			var startUtc = TimeZoneInfo.ConvertTimeToUtc(startDateTime, timeZone);
+			var endUtc = TimeZoneInfo.ConvertTimeToUtc(endDateTime, timeZone);
+
+			if (!IsWithinBusinessHours(startUtc, endUtc))
+			{
+				errorMessage = "Appointments must be scheduled during business hours (9:00 AM to 5:00 PM, Monday to Friday).";
+				return false;
+			}
+
+			return true;
+		}
+
+		// Check Business Hours in UTC
+		private bool IsWithinBusinessHours(DateTime startUtc, DateTime endUtc)
+		{
+			// Business hours: 9:00 AM to 5:00 PM, Monday to Friday (Eastern Standard Time)
+			var est = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+			var businessStart = new DateTime(startUtc.Year, startUtc.Month, startUtc.Day, 9, 0, 0, DateTimeKind.Unspecified);
+			var businessEnd = new DateTime(startUtc.Year, startUtc.Month, startUtc.Day, 17, 0, 0, DateTimeKind.Unspecified);
+
+			var businessStartUtc = TimeZoneInfo.ConvertTimeToUtc(businessStart, est);
+			var businessEndUtc = TimeZoneInfo.ConvertTimeToUtc(businessEnd, est);
+
+			if (startUtc < businessStartUtc || endUtc > businessEndUtc)
+			{
+				return false;
+			}
+
+			// Check if the date is a weekday
+			if (startUtc.DayOfWeek == DayOfWeek.Saturday || startUtc.DayOfWeek == DayOfWeek.Sunday)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		// Overlapping Appointment Check
+		private bool HasOverlappingAppointment(DateTime start, DateTime end, int? appointmentId = null)
+		{
+			using (var context = new ScheduleDbContext())
+			{
+				var overlappingAppointments = context.Appointments
+					.Where(a => a.Start < end && start < a.End);
+
+				if (appointmentId.HasValue)
+				{
+					overlappingAppointments = overlappingAppointments.Where(a => a.AppointmentId != appointmentId.Value);
+				}
+
+				return overlappingAppointments.Any();
 			}
 		}
 
@@ -512,62 +575,6 @@ namespace SchedulingApp
 			catch (Exception ex)
 			{
 				MessageBox.Show($"An error occurred while deleting the appointment: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-		}
-
-		// Validate Appointment Fields
-		private bool ValidateAppointmentFields(out string errorMessage)
-		{
-			errorMessage = string.Empty;
-
-			// Validate appointment time within business hours
-			var startDateTime = dtpAppointmentDate.Value.Date.Add(dtpStartTime.Value.TimeOfDay);
-			var endDateTime = dtpAppointmentDate.Value.Date.Add(dtpEndTime.Value.TimeOfDay);
-
-			if (!IsWithinBusinessHours(startDateTime, endDateTime))
-			{
-				errorMessage = "Appointments must be scheduled during business hours (9:00 AM to 5:00 PM, Monday to Friday).";
-				return false;
-			}
-
-			return true;
-		}
-
-		private bool IsWithinBusinessHours(DateTime start, DateTime end)
-		{
-			// Business hours: 9:00 AM to 5:00 PM, Monday to Friday (Eastern Standard Time)
-			var businessStart = new TimeSpan(9, 0, 0);
-			var businessEnd = new TimeSpan(17, 0, 0);
-			var startTime = start.TimeOfDay;
-			var endTime = end.TimeOfDay;
-
-			if (startTime < businessStart || endTime > businessEnd)
-			{
-				return false;
-			}
-
-			// Check if the date is a weekday
-			if (start.DayOfWeek == DayOfWeek.Saturday || start.DayOfWeek == DayOfWeek.Sunday)
-			{
-				return false;
-			}
-
-			return true;
-		}
-
-		private bool HasOverlappingAppointment(DateTime start, DateTime end, int? appointmentId = null)
-		{
-			using (var context = new ScheduleDbContext())
-			{
-				var overlappingAppointments = context.Appointments
-					.Where(a => a.Start < end && start < a.End);
-
-				if (appointmentId.HasValue)
-				{
-					overlappingAppointments = overlappingAppointments.Where(a => a.AppointmentId != appointmentId.Value);
-				}
-
-				return overlappingAppointments.Any();
 			}
 		}
 
@@ -619,6 +626,32 @@ namespace SchedulingApp
 			richTextBoxLog.AppendText(message + Environment.NewLine);
 		}
 
+		// Method to check for upcoming appointments and alert the user
+		private void ShowUpcomingAppointmentAlert()
+		{
+			try
+			{
+				using (var context = new ScheduleDbContext())
+				{
+					var currentTimeUtc = DateTime.UtcNow;
+					var upcomingTimeLocal = currentTimeUtc.AddMinutes(15);
+
+					var upcomingAppointments = context.Appointments
+						.Where(a => a.Start >= currentTimeUtc && a.Start <= upcomingTimeLocal)
+						.ToList();
+
+					if (upcomingAppointments.Any())
+					{
+						MessageBox.Show("You have an appointment within the next 15 minutes.", "Upcoming Appointment Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				LogMessage($"Error in ShowUpcomingAppointmentAlert: {ex.Message}");
+				MessageBox.Show($"An error occurred while checking for upcoming appointments: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
 
 	}
 }

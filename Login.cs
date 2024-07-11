@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace SchedulingApp
 {
@@ -57,11 +58,11 @@ namespace SchedulingApp
 			{
 				MessageBox.Show("Login successful");
 
-				//open appointment form
-				var appointmentForm = new AppointmentForm();
-				appointmentForm.Show();
-
+			
+				// Open appointment form
+				OpenFormsSideBySide();
 				this.Hide();
+
 			} else
 			{
 				lblError.Text = Resources.LoginError;
@@ -148,5 +149,22 @@ namespace SchedulingApp
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+
+		private void OpenFormsSideBySide()
+		{
+			CustomerForm customerForm = new CustomerForm();
+			AppointmentForm appointmentForm = new AppointmentForm();
+
+			// Open the customer form first
+			customerForm.StartPosition = FormStartPosition.Manual;
+			customerForm.Location = new Point(100, 100); // Set a desired position
+			customerForm.Hide();
+
+			// Open the appointment form next to the customer form
+			appointmentForm.StartPosition = FormStartPosition.Manual;
+			appointmentForm.Location = new Point(customerForm.Location.X + customerForm.Width + 10, customerForm.Location.Y); // Set position relative to customer form
+			appointmentForm.Show();
+		}
+
 	}
 }
