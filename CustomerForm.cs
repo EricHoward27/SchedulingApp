@@ -323,6 +323,8 @@ namespace SchedulingApp
 
 			return true;
 		}
+		// customer event handler 
+		public event Action CustomerAdded;
 
 		// add customer button click event
 		private void btnAddCustomer_Click(object sender, EventArgs e)
@@ -370,6 +372,7 @@ namespace SchedulingApp
 						context.Customers.Add(customer);
 						context.SaveChanges();
 						LoadCustomers();
+						CustomerAdded?.Invoke(); // this will trigger the event
 					}
 				}
 				else

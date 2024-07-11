@@ -57,10 +57,6 @@ namespace SchedulingApp
 			{
 				MessageBox.Show("Login successful");
 
-				//open customer form
-				var customerForm = new CustomerForm();
-				customerForm.Show();
-
 				//open appointment form
 				var appointmentForm = new AppointmentForm();
 				appointmentForm.Show();

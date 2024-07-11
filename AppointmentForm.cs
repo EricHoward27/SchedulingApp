@@ -40,6 +40,8 @@ namespace SchedulingApp
 		private MonthCalendar monthCalendar;
 		private DataGridView dataGridViewAppointments;
 		private RichTextBox richTextBoxLog;
+		private Label lblTimeZone;
+		private ComboBox cmbTimeZone;
 
 		public AppointmentForm()
 		{
@@ -55,98 +57,98 @@ namespace SchedulingApp
 			// Appointment Title
 			this.lblTitle = new System.Windows.Forms.Label();
 			this.lblTitle.AutoSize = true;
-			this.lblTitle.Location = new System.Drawing.Point(50, 200);
+			this.lblTitle.Location = new System.Drawing.Point(50, 75);
 			this.lblTitle.Name = "lblTitle";
 			this.lblTitle.Size = new System.Drawing.Size(90, 13);
 			this.lblTitle.Text = "Title";
 
 			this.txtTitle = new System.Windows.Forms.TextBox();
-			this.txtTitle.Location = new System.Drawing.Point(150, 200);
+			this.txtTitle.Location = new System.Drawing.Point(150, 75);
 			this.txtTitle.Name = "txtTitle";
 			this.txtTitle.Size = new System.Drawing.Size(200, 20);
 
 			// Appointment Description
 			this.lblDescription = new System.Windows.Forms.Label();
 			this.lblDescription.AutoSize = true;
-			this.lblDescription.Location = new System.Drawing.Point(50, 250);
+			this.lblDescription.Location = new System.Drawing.Point(50, 125);
 			this.lblDescription.Name = "lblDescription";
 			this.lblDescription.Size = new System.Drawing.Size(60, 13);
 			this.lblDescription.Text = "Description";
 
 			this.txtDescription = new System.Windows.Forms.TextBox();
-			this.txtDescription.Location = new System.Drawing.Point(150, 250);
+			this.txtDescription.Location = new System.Drawing.Point(150, 125);
 			this.txtDescription.Name = "txtDescription";
 			this.txtDescription.Size = new System.Drawing.Size(200, 20);
 
 			// Appointment Location
 			this.lblLocation = new System.Windows.Forms.Label();
 			this.lblLocation.AutoSize = true;
-			this.lblLocation.Location = new System.Drawing.Point(50, 300);
+			this.lblLocation.Location = new System.Drawing.Point(50, 175);
 			this.lblLocation.Name = "lblLocation";
 			this.lblLocation.Size = new System.Drawing.Size(55, 13);
 			this.lblLocation.Text = "Location";
 
 			this.txtLocation = new System.Windows.Forms.TextBox();
-			this.txtLocation.Location = new System.Drawing.Point(150, 300);
+			this.txtLocation.Location = new System.Drawing.Point(150, 175);
 			this.txtLocation.Name = "txtLocation";
 			this.txtLocation.Size = new System.Drawing.Size(200, 20);
 
 			// Appointment Contact
 			this.lblContact = new System.Windows.Forms.Label();
 			this.lblContact.AutoSize = true;
-			this.lblContact.Location = new System.Drawing.Point(50, 350);
+			this.lblContact.Location = new System.Drawing.Point(50, 225);
 			this.lblContact.Name = "lblContact";
 			this.lblContact.Size = new System.Drawing.Size(55, 13);
 			this.lblContact.Text = "Contact";
 
 			this.txtContact = new System.Windows.Forms.TextBox();
-			this.txtContact.Location = new System.Drawing.Point(150, 350);
+			this.txtContact.Location = new System.Drawing.Point(150, 225);
 			this.txtContact.Name = "txtContact";
 			this.txtContact.Size = new System.Drawing.Size(200, 20);
 
 			// Appointment URL
 			this.lblUrl = new System.Windows.Forms.Label();
 			this.lblUrl.AutoSize = true;
-			this.lblUrl.Location = new System.Drawing.Point(50, 400);
+			this.lblUrl.Location = new System.Drawing.Point(50, 275);
 			this.lblUrl.Name = "lblUrl";
 			this.lblUrl.Size = new System.Drawing.Size(55, 13);
 			this.lblUrl.Text = "URL";
 
 			this.txtUrl = new System.Windows.Forms.TextBox();
-			this.txtUrl.Location = new System.Drawing.Point(150, 400);
+			this.txtUrl.Location = new System.Drawing.Point(150, 275);
 			this.txtUrl.Name = "txtUrl";
 			this.txtUrl.Size = new System.Drawing.Size(200, 20);
 
 			// Appointment Type
 			this.lblAppointmentType = new System.Windows.Forms.Label();
 			this.lblAppointmentType.AutoSize = true;
-			this.lblAppointmentType.Location = new System.Drawing.Point(50, 450);
+			this.lblAppointmentType.Location = new System.Drawing.Point(50, 325);
 			this.lblAppointmentType.Name = "lblAppointmentType";
 			this.lblAppointmentType.Size = new System.Drawing.Size(90, 13);
 			this.lblAppointmentType.Text = "Appointment Type";
 
 			this.cmbAppointmentType = new System.Windows.Forms.ComboBox();
-			this.cmbAppointmentType.Location = new System.Drawing.Point(150, 450);
+			this.cmbAppointmentType.Location = new System.Drawing.Point(150, 325);
 			this.cmbAppointmentType.Name = "cmbAppointmentType";
 			this.cmbAppointmentType.Size = new System.Drawing.Size(200, 20);
 
 			// Appointment Date
 			this.lblAppointmentDate = new System.Windows.Forms.Label();
 			this.lblAppointmentDate.AutoSize = true;
-			this.lblAppointmentDate.Location = new System.Drawing.Point(50, 500);
+			this.lblAppointmentDate.Location = new System.Drawing.Point(50, 375);
 			this.lblAppointmentDate.Name = "lblAppointmentDate";
 			this.lblAppointmentDate.Size = new System.Drawing.Size(93, 13);
 			this.lblAppointmentDate.Text = "Appointment Date";
 
 			this.dtpAppointmentDate = new System.Windows.Forms.DateTimePicker();
-			this.dtpAppointmentDate.Location = new System.Drawing.Point(150, 500);
+			this.dtpAppointmentDate.Location = new System.Drawing.Point(150, 375);
 			this.dtpAppointmentDate.Name = "dtpAppointmentDate";
 			this.dtpAppointmentDate.Size = new System.Drawing.Size(200, 20);
 
 			// Start Time
 			this.lblStartTime = new System.Windows.Forms.Label();
 			this.lblStartTime.AutoSize = true;
-			this.lblStartTime.Location = new System.Drawing.Point(50, 550);
+			this.lblStartTime.Location = new System.Drawing.Point(50, 425);
 			this.lblStartTime.Name = "lblStartTime";
 			this.lblStartTime.Size = new System.Drawing.Size(55, 13);
 			this.lblStartTime.Text = "Start Time";
@@ -154,14 +156,14 @@ namespace SchedulingApp
 			this.dtpStartTime = new System.Windows.Forms.DateTimePicker();
 			this.dtpStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
 			this.dtpStartTime.ShowUpDown = true;
-			this.dtpStartTime.Location = new System.Drawing.Point(150, 550);
+			this.dtpStartTime.Location = new System.Drawing.Point(150, 425);
 			this.dtpStartTime.Name = "dtpStartTime";
 			this.dtpStartTime.Size = new System.Drawing.Size(200, 20);
 
 			// End Time
 			this.lblEndTime = new System.Windows.Forms.Label();
 			this.lblEndTime.AutoSize = true;
-			this.lblEndTime.Location = new System.Drawing.Point(50, 600);
+			this.lblEndTime.Location = new System.Drawing.Point(50, 475);
 			this.lblEndTime.Name = "lblEndTime";
 			this.lblEndTime.Size = new System.Drawing.Size(52, 13);
 			this.lblEndTime.Text = "End Time";
@@ -169,26 +171,26 @@ namespace SchedulingApp
 			this.dtpEndTime = new System.Windows.Forms.DateTimePicker();
 			this.dtpEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
 			this.dtpEndTime.ShowUpDown = true;
-			this.dtpEndTime.Location = new System.Drawing.Point(150, 600);
+			this.dtpEndTime.Location = new System.Drawing.Point(150, 475);
 			this.dtpEndTime.Name = "dtpEndTime";
 			this.dtpEndTime.Size = new System.Drawing.Size(200, 20);
 
 			// Customer
 			this.lblCustomer = new System.Windows.Forms.Label();
 			this.lblCustomer.AutoSize = true;
-			this.lblCustomer.Location = new System.Drawing.Point(50, 650);
+			this.lblCustomer.Location = new System.Drawing.Point(50, 525);
 			this.lblCustomer.Name = "lblCustomer";
 			this.lblCustomer.Size = new System.Drawing.Size(51, 13);
 			this.lblCustomer.Text = "Customer";
 
 			this.cmbCustomer = new System.Windows.Forms.ComboBox();
-			this.cmbCustomer.Location = new System.Drawing.Point(150, 650);
+			this.cmbCustomer.Location = new System.Drawing.Point(150, 525);
 			this.cmbCustomer.Name = "cmbCustomer";
 			this.cmbCustomer.Size = new System.Drawing.Size(200, 20);
 
 			// Add Appointment Button
 			this.btnAddAppointment = new System.Windows.Forms.Button();
-			this.btnAddAppointment.Location = new System.Drawing.Point(150, 700);
+			this.btnAddAppointment.Location = new System.Drawing.Point(150, 600);
 			this.btnAddAppointment.Name = "btnAddAppointment";
 			this.btnAddAppointment.Size = new System.Drawing.Size(100, 30);
 			this.btnAddAppointment.Text = "Add";
@@ -196,7 +198,7 @@ namespace SchedulingApp
 
 			// Update Appointment Button
 			this.btnUpdateAppointment = new System.Windows.Forms.Button();
-			this.btnUpdateAppointment.Location = new System.Drawing.Point(260, 700);
+			this.btnUpdateAppointment.Location = new System.Drawing.Point(260, 600);
 			this.btnUpdateAppointment.Name = "btnUpdateAppointment";
 			this.btnUpdateAppointment.Size = new System.Drawing.Size(100, 30);
 			this.btnUpdateAppointment.Text = "Update";
@@ -204,7 +206,7 @@ namespace SchedulingApp
 
 			// Delete Appointment Button
 			this.btnDeleteAppointment = new System.Windows.Forms.Button();
-			this.btnDeleteAppointment.Location = new System.Drawing.Point(370, 700);
+			this.btnDeleteAppointment.Location = new System.Drawing.Point(370, 600);
 			this.btnDeleteAppointment.Name = "btnDeleteAppointment";
 			this.btnDeleteAppointment.Size = new System.Drawing.Size(100, 30);
 			this.btnDeleteAppointment.Text = "Delete";
@@ -212,23 +214,22 @@ namespace SchedulingApp
 
 			// Calendar View
 			this.monthCalendar = new System.Windows.Forms.MonthCalendar();
-			this.monthCalendar.Location = new System.Drawing.Point(400, 200);
+			this.monthCalendar.Location = new System.Drawing.Point(400,75);
 			this.monthCalendar.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar_DateChanged);
 
 			// Appointments DataGridView
 			this.dataGridViewAppointments = new System.Windows.Forms.DataGridView();
-			this.dataGridViewAppointments.Location = new System.Drawing.Point(400, 450);
+			this.dataGridViewAppointments.Location = new System.Drawing.Point(400, 270);
 			this.dataGridViewAppointments.Size = new System.Drawing.Size(550, 300);
 			this.dataGridViewAppointments.SelectionChanged += new System.EventHandler(this.dataGridViewAppointments_SelectionChanged);
 
 			// Initialize the RichTextBox for logging
 			this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
-			this.richTextBoxLog.Location = new System.Drawing.Point(50, 750);
+			this.richTextBoxLog.Location = new System.Drawing.Point(50, 700);
 			this.richTextBoxLog.Size = new System.Drawing.Size(900, 100);
 			this.richTextBoxLog.ReadOnly = true;
 
-			// Add the RichTextBox to the form
-			this.Controls.Add(this.richTextBoxLog);
+
 
 			// Add controls to form
 			this.Controls.Add(this.lblTitle);
@@ -256,6 +257,7 @@ namespace SchedulingApp
 			this.Controls.Add(this.btnDeleteAppointment);
 			this.Controls.Add(this.monthCalendar);
 			this.Controls.Add(this.dataGridViewAppointments);
+			this.Controls.Add(this.richTextBoxLog);
 		}
 		// Load Appointments
 		private void LoadAppointments()
@@ -266,6 +268,7 @@ namespace SchedulingApp
 				{
 					var appointments = context.Appointments.ToList();
 					dataGridViewAppointments.DataSource = appointments;
+					dataGridViewAppointments.ClearSelection();
 				}
 			}
 			catch (Exception ex)
@@ -278,6 +281,9 @@ namespace SchedulingApp
 		{
 			LoadCustomersAndAppointmentTypes();
 			LoadAppointments();
+			OpenCustomerForm();
+			ClearAppointmentFormData();
+			dataGridViewAppointments.ClearSelection();
 		}
 		private void dataGridViewAppointments_SelectionChanged(object sender, EventArgs e)
 		{
@@ -291,6 +297,18 @@ namespace SchedulingApp
 					{
 						var customer = context.Customers.FirstOrDefault(c => c.CustomerId == appointment.CustomerId);
 
+						var timeZone = GetLocalTimeZone();
+
+						var start = appointment.Start;
+
+						var end = appointment.End;
+
+						if (timeZone != null)
+						{
+							start = TimeZoneInfo.ConvertTimeFromUtc(start, timeZone);
+							end = TimeZoneInfo.ConvertTimeFromUtc(end, timeZone);
+						}
+
 						txtTitle.Text = appointment.Title;
 						txtDescription.Text = appointment.Description;
 						txtLocation.Text = appointment.Location;
@@ -298,14 +316,27 @@ namespace SchedulingApp
 						txtUrl.Text = appointment.Url;
 						cmbAppointmentType.SelectedItem = appointment.Type;
 						dtpAppointmentDate.Value = appointment.Start.Date;
-						dtpStartTime.Value = appointment.Start;
-						dtpEndTime.Value = appointment.End;
+						dtpStartTime.Value = start;
+						dtpEndTime.Value = end;
 						cmbCustomer.SelectedValue = appointment.CustomerId;
 					}
 				}
 			}
+			else
+			{
+				ClearAppointmentFormData();
+			}
 		}
 
+		private void OpenCustomerForm()
+		{
+			CustomerForm customerForm = new CustomerForm();
+			customerForm.CustomerAdded += LoadCustomersAndAppointmentTypes; // Subscribe to the event
+			customerForm.Show();
+		}
+
+
+		// Load Customers and Appointment Types
 		private void LoadCustomersAndAppointmentTypes()
 		{
 			try
@@ -328,6 +359,12 @@ namespace SchedulingApp
 			}
 		}
 
+		private TimeZoneInfo GetLocalTimeZone()
+		{
+			return TimeZoneInfo.Local;
+		}
+
+
 		// Add Appointment Button Click Event
 		private void btnAddAppointment_Click(object sender, EventArgs e)
 		{
@@ -339,6 +376,17 @@ namespace SchedulingApp
 					{
 						var startDateTime = dtpAppointmentDate.Value.Date.Add(dtpStartTime.Value.TimeOfDay);
 						var endDateTime = dtpAppointmentDate.Value.Date.Add(dtpEndTime.Value.TimeOfDay);
+						var timeZone = GetLocalTimeZone();
+
+						if (timeZone != null)
+						{
+							startDateTime = TimeZoneInfo.ConvertTimeToUtc(startDateTime, timeZone);
+							endDateTime = TimeZoneInfo.ConvertTimeToUtc(endDateTime, timeZone);
+						}
+						else
+						{
+							return; // exit if no time zone is selected
+						}
 
 						if (IsWithinBusinessHours(startDateTime, endDateTime) && !HasOverlappingAppointment(startDateTime, endDateTime))
 						{
@@ -353,15 +401,16 @@ namespace SchedulingApp
 								Url = txtUrl.Text.Trim(),
 								Start = startDateTime,
 								End = endDateTime,
-								CreateDate = DateTime.Now,
+								CreateDate = DateTime.UtcNow,
 								CreatedBy = "Admin",
-								LastUpdate = DateTime.Now,
+								LastUpdate = DateTime.UtcNow,
 								LastUpdateBy = "Admin"
 							};
 
 							context.Appointments.Add(appointment);
 							context.SaveChanges();
 							LoadAppointments();
+							ClearAppointmentFormData(); // Clear form fields after adding appointment
 						}
 						else
 						{
@@ -396,6 +445,17 @@ namespace SchedulingApp
 						{
 							var startDateTime = dtpAppointmentDate.Value.Date.Add(dtpStartTime.Value.TimeOfDay);
 							var endDateTime = dtpAppointmentDate.Value.Date.Add(dtpEndTime.Value.TimeOfDay);
+							var timeZone = GetLocalTimeZone();
+
+							if (timeZone != null)
+							{
+								startDateTime = TimeZoneInfo.ConvertTimeToUtc(startDateTime, timeZone);
+								endDateTime = TimeZoneInfo.ConvertTimeToUtc(endDateTime, timeZone);
+							}
+							else
+							{
+								return; // exit if no time zone is selected
+							}
 
 							if (IsWithinBusinessHours(startDateTime, endDateTime) && !HasOverlappingAppointment(startDateTime, endDateTime, appointmentId))
 							{
@@ -408,7 +468,7 @@ namespace SchedulingApp
 								appointment.Url = txtUrl.Text.Trim();
 								appointment.Start = startDateTime;
 								appointment.End = endDateTime;
-								appointment.LastUpdate = DateTime.Now;
+								appointment.LastUpdate = DateTime.UtcNow;
 								appointment.LastUpdateBy = "Admin";
 								context.SaveChanges();
 								LoadAppointments();
@@ -537,6 +597,21 @@ namespace SchedulingApp
 				LogMessage($"Error: {ex.Message}\n{innerExceptionMessage}");
 				MessageBox.Show($"An error occurred while loading appointments for the selected date: {ex.Message}\n{innerExceptionMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+		}
+
+		// Clear Appointment Fields
+		private void ClearAppointmentFormData()
+		{
+			txtTitle.Text = string.Empty;
+			txtDescription.Text = string.Empty;
+			txtLocation.Text = string.Empty;
+			txtContact.Text = string.Empty;
+			txtUrl.Text = string.Empty;
+			cmbAppointmentType.SelectedIndex = -1;
+			dtpAppointmentDate.Value = DateTime.Today;
+			dtpStartTime.Value = DateTime.Now;
+			dtpEndTime.Value = DateTime.Now;
+			cmbCustomer.SelectedIndex = -1;
 		}
 
 		private void LogMessage(string message)
