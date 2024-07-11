@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 
 namespace SchedulingApp
 {
@@ -57,8 +58,9 @@ namespace SchedulingApp
 			if (ValidateUser(username, password))
 			{
 				MessageBox.Show("Login successful");
+				// Log the login
+				LogLogin(username);
 
-			
 				// Open appointment form
 				OpenFormsSideBySide();
 				this.Hide();
@@ -164,6 +166,16 @@ namespace SchedulingApp
 			appointmentForm.StartPosition = FormStartPosition.Manual;
 			appointmentForm.Location = new Point(customerForm.Location.X + customerForm.Width + 10, customerForm.Location.Y); // Set position relative to customer form
 			appointmentForm.Show();
+		}
+
+		private void LogLogin(string username)
+		{
+			// Set the log file path relative to the application's directory
+			string logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Login_History.txt");
+			string logEntry = $"{DateTime.Now}: {username} logged in";
+
+			// Append the log entry to the file
+			File.AppendAllText(logFilePath, logEntry + Environment.NewLine);
 		}
 
 	}
