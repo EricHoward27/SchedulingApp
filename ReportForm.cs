@@ -29,11 +29,11 @@ namespace SchedulingApp
 			this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataGridView.Location = new System.Drawing.Point(0, 0);
 			this.dataGridView.Name = "dataGridView";
-			this.dataGridView.Size = new System.Drawing.Size(800, 450);
+			this.dataGridView.Size = new System.Drawing.Size(350, 250);
 			this.dataGridView.TabIndex = 0;
 
 			// ReportForm
-			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.ClientSize = new System.Drawing.Size(340, 250);
 			this.Controls.Add(this.dataGridView);
 			this.Name = "ReportForm";
 			this.Text = "Report";
