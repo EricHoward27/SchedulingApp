@@ -23,6 +23,7 @@ namespace SchedulingApp
 		private TextBox txtPassword;
 		private Button btnLogin;
 		private Label lblError;
+		private Button btnCreateUser;
 
 		public Login()
 		{
@@ -136,6 +137,17 @@ namespace SchedulingApp
 			this.lblError.Size = new System.Drawing.Size(0, 13);
 			this.lblError.TabIndex = 5;
 
+
+			// Create User Button
+			this.btnCreateUser = new System.Windows.Forms.Button();
+			this.btnCreateUser.Location = new System.Drawing.Point(116, 64);
+			this.btnCreateUser.Name = "btnCreateUser";
+			this.btnCreateUser.Size = new System.Drawing.Size(75, 23);
+			this.btnCreateUser.TabIndex = 5;
+			this.btnCreateUser.Text = "Create User";
+			this.btnCreateUser.UseVisualStyleBackColor = true;
+			this.btnCreateUser.Click += new System.EventHandler(this.btnCreateUser_Click);
+
 			// loginform
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -146,10 +158,12 @@ namespace SchedulingApp
 			this.Controls.Add(this.lblPassword);
 			this.Controls.Add(this.txtUsername);
 			this.Controls.Add(this.lblUsername);
+			this.Controls.Add(this.btnCreateUser);
 			this.Name = "LoginForm";
 			this.Text = "Login";
 			this.ResumeLayout(false);
 			this.PerformLayout();
+
 		}
 
 		private void OpenFormsSideBySide()
@@ -176,6 +190,12 @@ namespace SchedulingApp
 
 			// Append the log entry to the file
 			File.AppendAllText(logFilePath, logEntry + Environment.NewLine);
+		}
+
+		private void btnCreateUser_Click(object sender, EventArgs e)
+		{
+			CreateUserForm createUserForm = new CreateUserForm();
+			createUserForm.ShowDialog();
 		}
 
 	}
