@@ -15,14 +15,24 @@ namespace SchedulingApp.Models
 		}
 
 		public DbSet<User> Users { get; set; }
-		public DbSet<City> Cities { get; set; }
+        public DbSet<City> Cities { get; set; }
 		public DbSet<Country> Countries { get; set; }
 		public DbSet<Address> Addresses { get; set; }
 		public DbSet<Customer> Customers { get; set; }
 		public DbSet<Appointment> Appointments { get; set; }
 
-		//report for the num of appointments types by month
-		public List<AppointmentReport> GetAppointmentTypesByMonth()
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>().ToTable("user");
+			modelBuilder.Entity<City>().ToTable("city");
+			modelBuilder.Entity<Country>().ToTable("country");
+            modelBuilder.Entity<Address>().ToTable("address");
+            modelBuilder.Entity<Customer>().ToTable("customer");
+            modelBuilder.Entity<Appointment>().ToTable("appointment");
+        }
+        //report for the num of appointments types by month
+        public List<AppointmentReport> GetAppointmentTypesByMonth()
 		{
 			var appointments = Appointments.ToList(); // Fetch all appointments to memory
 
