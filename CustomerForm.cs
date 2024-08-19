@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -453,20 +454,37 @@ namespace SchedulingApp
 
 					if (customer != null)
 					{
-						var address = context.Addresses.FirstOrDefault(a => a.AddressId == customer.AddressId);
-						context.Customers.Remove(customer);
-						if (address != null)
+						// check if addressid is used by any other customers
+						bool isAddressShared = context.Customers.Any(c => c.AddressId == customer.AddressId && c.CustomerId != customerId);
+						if (!isAddressShared)
 						{
-							context.Addresses.Remove(address);
-						}
+                            var address = context.Addresses.FirstOrDefault(a => a.AddressId == customer.AddressId);
+							if (address != null)
+                            {
+                                context.Addresses.Remove(address);
+                            }
+                        }
+					
+						context.Customers.Remove(customer);
 						context.SaveChanges();
 						LoadCustomers();
 					}
 				}
 			}
+			catch (DbUpdateConcurrencyException)
+			{
+				MessageBox.Show("The record was modified by another user. Please refresh and try again.", "Concurrency Error",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			catch (DbUpdateException ex)
+			{
+				// log the inner exception details
+				var innerException = ex.InnerException?.InnerException?.Message ?? ex.Message;
+				MessageBox.Show($"A database error occurred while deleting the customer: {innerException}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 			catch (Exception ex)
 			{
-				MessageBox.Show($"An error occurred while deleting the customer: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 

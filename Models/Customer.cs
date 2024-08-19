@@ -15,6 +15,8 @@ namespace SchedulingApp.Models
 		public string CustomerName { get; set; }
 		[Column("addressId")]
 		public int AddressId { get; set; }
+		[ForeignKey("AddressId")]
+		public virtual Address Address { get; set; }
 		[Column("active")]
 		public bool Active { get; set; }
 		[Column("createDate")]

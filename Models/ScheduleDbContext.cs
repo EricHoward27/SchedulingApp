@@ -12,6 +12,7 @@ namespace SchedulingApp.Models
 	{
 		public ScheduleDbContext() : base("name=ScheduleDbContext")
 		{
+			this.Configuration.LazyLoadingEnabled = false;
 		}
 
 		public DbSet<User> Users { get; set; }
@@ -27,9 +28,30 @@ namespace SchedulingApp.Models
             modelBuilder.Entity<User>().ToTable("user");
 			modelBuilder.Entity<City>().ToTable("city");
 			modelBuilder.Entity<Country>().ToTable("country");
-            modelBuilder.Entity<Address>().ToTable("address");
+			modelBuilder.Entity<Address>().ToTable("address");
             modelBuilder.Entity<Customer>().ToTable("customer");
             modelBuilder.Entity<Appointment>().ToTable("appointment");
+
+			modelBuilder.Entity<Address>().Property(a => a.AddressId).HasColumnName("addressId");
+			modelBuilder.Entity<Address>().Property(a => a.Address1).HasColumnName("address");
+			modelBuilder.Entity<Address>().Property(a => a.Address2).HasColumnName("address2");
+			modelBuilder.Entity<Address>().Property(a => a.CityId).HasColumnName("cityId");
+			modelBuilder.Entity<Address>().Property(a => a.PostalCode).HasColumnName("postalCode");
+			modelBuilder.Entity<Address>().Property(a => a.Phone).HasColumnName("phone");
+			modelBuilder.Entity<Address>().Property(a => a.CreateDate).HasColumnName("createDate");
+			modelBuilder.Entity<Address>().Property(a => a.CreatedBy).HasColumnName("createdBy");
+			modelBuilder.Entity<Address>().Property(a => a.LastUpdate).HasColumnName("lastUpdate");
+			modelBuilder.Entity<Address>().Property(a => a.LastUpdateBy).HasColumnName("lastUpdateBy");
+
+			// customer
+			modelBuilder.Entity<Customer>().Property(c => c.CustomerId).HasColumnName("customerId");
+			modelBuilder.Entity<Customer>().Property(c => c.CustomerName).HasColumnName("customerName");
+			modelBuilder.Entity<Customer>().Property(c => c.AddressId).HasColumnName("addressId");
+			modelBuilder.Entity<Customer>().Property(c => c.Active).HasColumnName("active");
+			modelBuilder.Entity<Customer>().Property(c => c.CreateDate).HasColumnName("createDate");
+			modelBuilder.Entity<Customer>().Property(c => c.CreatedBy).HasColumnName("createdBy");
+			modelBuilder.Entity<Customer>().Property(c => c.LastUpdate).HasColumnName("lastUpdate");
+		
         }
         //report for the num of appointments types by month
         public List<AppointmentReport> GetAppointmentTypesByMonth()
