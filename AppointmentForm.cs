@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -481,11 +483,45 @@ namespace SchedulingApp
 					MessageBox.Show(errorMessage, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
-			catch (Exception ex)
-			{
-				MessageBox.Show($"An error occurred while adding the appointment: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-		}
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Debug.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                    }
+
+                }
+                MessageBox.Show("A validation error occurred. Check the debug output for more information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (DbUpdateException ex)
+            {
+                // log the details 
+                var errorMessageBuilder = new StringBuilder();
+
+                errorMessageBuilder.AppendLine("A database error occured while adding the appointment.");
+
+                errorMessageBuilder.AppendLine($"Exception Message: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    errorMessageBuilder.AppendLine($"Inner Exception: {ex.InnerException.Message}");
+
+                    if (ex.InnerException.InnerException != null)
+                    {
+                        errorMessageBuilder.AppendLine($"Inner Exception: {ex.InnerException.InnerException.Message}");
+                    }
+                }
+
+                Debug.WriteLine(errorMessageBuilder.ToString());
+                MessageBox.Show(errorMessageBuilder.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception: {ex.Message}");
+                MessageBox.Show($"An error occurred while adding the appointment: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
 		// Update Appointment Button Click Event
 		private void btnUpdateAppointment_Click(object sender, EventArgs e)
@@ -541,12 +577,45 @@ namespace SchedulingApp
 					MessageBox.Show(errorMessage, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
+			catch (DbEntityValidationException ex)
+			{
+				foreach (var validationErrors in ex.EntityValidationErrors)
+				{
+					foreach (var validationError in validationErrors.ValidationErrors)
+					{
+						Debug.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+					}
+
+				}
+				MessageBox.Show("A validation error occurred. Check the debug output for more information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			catch (DbUpdateException ex)
+			{
+				// log the details 
+				var errorMessageBuilder = new StringBuilder();
+
+				errorMessageBuilder.AppendLine("A database error occured while adding the appointment.");
+
+				errorMessageBuilder.AppendLine($"Exception Message: {ex.Message}");
+				if (ex.InnerException != null)
+				{
+					errorMessageBuilder.AppendLine($"Inner Exception: {ex.InnerException.Message}");
+
+					if (ex.InnerException.InnerException != null)
+					{
+						errorMessageBuilder.AppendLine($"Inner Exception: {ex.InnerException.InnerException.Message}");
+					}
+				}
+
+				Debug.WriteLine(errorMessageBuilder.ToString());
+				MessageBox.Show(errorMessageBuilder.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 			catch (Exception ex)
 			{
-				MessageBox.Show($"An error occurred while updating the appointment: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Debug.WriteLine($"Exception: {ex.Message}");
+				MessageBox.Show($"An error occurred while adding the appointment: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
-
 		// Validate Appointment Fields
 		private bool ValidateAppointmentFields(out string errorMessage)
 		{
