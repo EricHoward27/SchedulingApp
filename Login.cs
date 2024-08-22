@@ -59,11 +59,17 @@ namespace SchedulingApp
 			if (ValidateUser(username, password))
 			{
 				MessageBox.Show("Login successful");
+
+				int userId = GetUserIdByUsername(username);
+				//pass the user id to the appointment form
+				AppointmentForm appointmentForm = new AppointmentForm(userId);
+				//appointmentForm.Show();
+
 				// Log the login
 				LogLogin(username);
 
 				// Open appointment form
-				OpenFormsSideBySide();
+				OpenFormsSideBySide(userId);
 				this.Hide();
 
 			} else
@@ -166,10 +172,11 @@ namespace SchedulingApp
 
 		}
 
-		private void OpenFormsSideBySide()
+		private void OpenFormsSideBySide(int userId)
 		{
+
 			CustomerForm customerForm = new CustomerForm();
-			AppointmentForm appointmentForm = new AppointmentForm();
+			AppointmentForm appointmentForm = new AppointmentForm(userId);
 
 			// Open the customer form first
 			customerForm.StartPosition = FormStartPosition.Manual;
@@ -197,6 +204,15 @@ namespace SchedulingApp
 			CreateUserForm createUserForm = new CreateUserForm();
 			createUserForm.ShowDialog();
 		}
+
+		private int GetUserIdByUsername(string username)
+        {
+            using (var context = new ScheduleDbContext())
+            {
+                var user = context.Users.FirstOrDefault(u => u.UserName == username);
+				return user?.UserId ?? -1; // Return -1 if user is not found
+            }
+        }
 
 	}
 }

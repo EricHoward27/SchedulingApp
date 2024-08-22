@@ -46,10 +46,11 @@ namespace SchedulingApp
 		private Button btnAppointmentTypesByMonth;
 		private Button btnUserSchedules;
 		private Button btnCustomerAppointments;
-
-		public AppointmentForm()
+		private int _loggedInUserId;
+		public AppointmentForm(int userId)
 		{
 			InitializeComponents();
+			_loggedInUserId = userId;
 			this.Load += new System.EventHandler(this.Form_Load);
 		}
 
@@ -436,6 +437,17 @@ namespace SchedulingApp
 				{
 					using (var context = new ScheduleDbContext())
 					{
+						// ensure the selected userid exists in user table
+						int userId = GetLoggedInUserId();
+						// ensure user exists
+						var userExists = context.Users.Any(u => u.UserId == userId);
+
+						if (!userExists)
+                        {
+                            MessageBox.Show("User does not exist. Please log in again.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
 						var startDateTime = dtpAppointmentDate.Value.Date.Add(dtpStartTime.Value.TimeOfDay);
 						var endDateTime = dtpAppointmentDate.Value.Date.Add(dtpEndTime.Value.TimeOfDay);
 						var timeZone = TimeZoneInfo.Local;
@@ -452,6 +464,7 @@ namespace SchedulingApp
 						{
 							var appointment = new Appointment
 							{
+								UserId = GetLoggedInUserId(),
 								CustomerId = (int)cmbCustomer.SelectedValue,
 								Title = txtTitle.Text.Trim(),
 								Description = txtDescription.Text.Trim(),
@@ -779,6 +792,11 @@ namespace SchedulingApp
 				MessageBox.Show($"An error occurred while checking for upcoming appointments: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
+
+		private int GetLoggedInUserId()
+        {
+            return _loggedInUserId;
+        }
 
 	}
 }

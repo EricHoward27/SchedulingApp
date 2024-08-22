@@ -24,6 +24,7 @@ namespace SchedulingApp.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+			modelBuilder.Entity<Appointment>().HasRequired(a => a.User).WithMany().HasForeignKey(a => a.UserId).WillCascadeOnDelete(false);
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>().ToTable("user");
 			modelBuilder.Entity<City>().ToTable("city");
@@ -51,6 +52,7 @@ namespace SchedulingApp.Models
 			modelBuilder.Entity<Customer>().Property(c => c.CreateDate).HasColumnName("createDate");
 			modelBuilder.Entity<Customer>().Property(c => c.CreatedBy).HasColumnName("createdBy");
 			modelBuilder.Entity<Customer>().Property(c => c.LastUpdate).HasColumnName("lastUpdate");
+
 		
         }
         //report for the num of appointments types by month

@@ -13,9 +13,11 @@ namespace SchedulingApp.Models
 		public int AppointmentId { get; set; }
 		[Column("customerId")]
 		public int CustomerId { get; set; }
-		[Column("userId")]
+
+        [ForeignKey("User")]
+        [Column("userId")]
 		public int UserId { get; set; }
-		[ForeignKey("UserId")]
+	
 		public virtual User User { get; set; }
 		[Column("title")]
 		public string Title { get; set; }
