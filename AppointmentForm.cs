@@ -297,7 +297,28 @@ namespace SchedulingApp
 				using (var context = new ScheduleDbContext())
 				{
 					var appointments = context.Appointments.ToList();
-					dataGridViewAppointments.DataSource = appointments;
+					var timeZone = GetLocalTimeZone();
+
+						var localAppointments = appointments.Select(a => new
+						{
+							AppointmentId = a.AppointmentId,
+							CustomerId = a.CustomerId,
+							UserId = a.UserId,
+							Title = a.Title,
+							Description = a.Description,
+							Location = a.Location,
+							Contact = a.Contact,
+							Type = a.Type,
+							Url = a.Url,
+							Start = TimeZoneInfo.ConvertTimeFromUtc(a.Start, TimeZoneInfo.Local),
+							End = TimeZoneInfo.ConvertTimeFromUtc(a.End, TimeZoneInfo.Local),
+							CreateDate = a.CreateDate,
+							CreatedBy = a.CreatedBy,
+							LastUpdate = a.LastUpdate,
+							LastUpdateBy = a.LastUpdateBy
+						})
+						.ToList();
+					dataGridViewAppointments.DataSource = localAppointments;
 					dataGridViewAppointments.ClearSelection();
 				}
 			}
@@ -306,8 +327,9 @@ namespace SchedulingApp
 				MessageBox.Show($"An error occurred while loading appointments: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
-		// Form Load Event
-		private void Form_Load(object sender, EventArgs e)
+     
+        // Form Load Event
+        private void Form_Load(object sender, EventArgs e)
 		{
 			LoadCustomersAndAppointmentTypes();
 			ShowUpcomingAppointmentAlert();
@@ -730,12 +752,37 @@ namespace SchedulingApp
 					var nextDate = selectedDate.AddDays(1);
 					LogMessage($"Selected Date: {selectedDate}");
 
-					var appointments = context.Appointments
-						.Where(a => a.Start >= selectedDate && a.Start < nextDate)
-						.ToList();
+					var appointments = context.Appointments.ToList()
+						.Where(a => a.Start.Date == selectedDate).ToList();
+					var timeZone = TimeZoneInfo.Local;
 
-					LogMessage($"Appointments Count: {appointments.Count}");
-					dataGridViewAppointments.DataSource = appointments;
+                    var localAppointments = appointments.Select(a => new
+                    {
+                        AppointmentId = a.AppointmentId,
+                        CustomerId = a.CustomerId,
+                        UserId = a.UserId,
+                        Title = a.Title,
+                        Description = a.Description,
+                        Location = a.Location,
+                        Contact = a.Contact,
+                        Type = a.Type,
+                        Url = a.Url,
+                        Start = TimeZoneInfo.ConvertTimeFromUtc(a.Start, TimeZoneInfo.Local),
+                        End = TimeZoneInfo.ConvertTimeFromUtc(a.End, TimeZoneInfo.Local),
+                        CreateDate = a.CreateDate,
+                        CreatedBy = a.CreatedBy,
+                        LastUpdate = a.LastUpdate,
+                        LastUpdateBy = a.LastUpdateBy
+                    })
+                    .ToList();
+                    dataGridViewAppointments.DataSource = localAppointments;
+                    dataGridViewAppointments.ClearSelection();
+                    /*var appointments = context.Appointments
+						.Where(a => a.Start >= selectedDate && a.Start < nextDate)
+						.ToList(); */
+
+                    LogMessage($"Appointments Count: {appointments.Count}");
+					//dataGridViewAppointments.DataSource = appointments;
 				}
 			}
 			catch (Exception ex)
